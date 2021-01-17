@@ -1,38 +1,46 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect } from "react";
-import { StyleSheet, Text, View, LogBox } from "react-native";
-import * as firebase from "firebase";
+import React, { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  LogBox,
+  FlatList,
+  SafeAreaView,
+} from "react-native";
+import { getShops } from "./src/lib/firebase";
+import { Shop } from "./src/type/shop";
+
 import "firebase/firestore";
+import { ShopReviewItem } from "./src/components/ShopReviewItem";
 LogBox.ignoreLogs(["Setting a timer"]);
 
-if (!firebase.apps.length) {
-  const firebaseConfig = {
-    apiKey: "AIzaSyD0UYMulmrUFnd5v57D8uh1dBaHtoBspDk",
-    authDomain: "shop-review-9c17f.firebaseapp.com",
-    projectId: "shop-review-9c17f",
-    storageBucket: "shop-review-9c17f.appspot.com",
-    messagingSenderId: "191235937623",
-    appId: "1:191235937623:web:557aee08cbbaf8516d9a12",
-    measurementId: "G-PX36JY14YY",
-  };
-  firebase.initializeApp(firebaseConfig);
-}
-
 export default function App() {
+  const [shops, setShops] = useState<Shop[]>([]);
+
   useEffect(() => {
-    getFirebaseItems();
+    getFirebaseItem();
   }, []);
 
-  const getFirebaseItems = async () => {
-    const snapshot = await firebase.firestore().collection("shops").get();
-    const shops = snapshot.docs.map((doc) => doc.data());
-    console.log(shops);
+  const getFirebaseItem = async () => {
+    const shops = await getShops();
+    setShops(shops);
   };
+  const shopItems = shops.map((shop, index) => {
+    return <ShopReviewItem shop={shop} key={index.toString()} />;
+  });
   return (
-    <View style={styles.container}>
-      <Text>Oyour app!</Text>
+    <SafeAreaView style={styles.container}>
+      <FlatList
+        data={shops}
+        renderItem={({ item }: { item: Shop }) => (
+          <ShopReviewItem shop={item} />
+        )}
+        keyExtractor={(item, index) => index.toString()}
+        numColumns={2}
+      />
       <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -42,5 +50,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    marginTop: 7,
   },
 });
