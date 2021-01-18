@@ -2,6 +2,7 @@ import { View, StyleSheet, Image, Text, Dimensions } from "react-native";
 import React from "react";
 import { Shop } from "../type/shop";
 import Stars from "./Stars";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const { width } = Dimensions.get("window");
 const CONTAINER_WIDTH = width / 2;
@@ -31,16 +32,17 @@ const styles = StyleSheet.create({
 
 type Props = {
   shop: Shop;
+  onPress: () => void;
 };
 
-export const ShopReviewItem: React.FC<Props> = ({ shop }) => {
+export const ShopReviewItem: React.FC<Props> = ({ shop, onPress }) => {
   const { name, place, imageUrl, score, description } = shop;
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <Image source={{ uri: imageUrl }} style={styles.image} />
       <Text style={styles.nameText}>{name}</Text>
       <Text style={styles.placeText}>{place}</Text>
       <Stars score={score} />
-    </View>
+    </TouchableOpacity>
   );
 };

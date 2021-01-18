@@ -10,7 +10,7 @@ if (!firebase.apps.length) {
 
 export const getShops = async () => {
     try {
-        const snapshot = await firebase.firestore().collection("shops").where('place', '==', '品川').orderBy('score', 'desc').get();
+        const snapshot = await firebase.firestore().collection("shops").orderBy('score', 'desc').get();
         const shops: Shop[] = snapshot.docs.map((doc) => doc.data() as Shop);
         return shops;
     }

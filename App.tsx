@@ -10,38 +10,13 @@ import {
 } from "react-native";
 import { getShops } from "./src/lib/firebase";
 import { Shop } from "./src/type/shop";
-
+import AppNavigator from "./src/navigations/AppNavigator";
 import "firebase/firestore";
 import { ShopReviewItem } from "./src/components/ShopReviewItem";
 LogBox.ignoreLogs(["Setting a timer"]);
 
 export default function App() {
-  const [shops, setShops] = useState<Shop[]>([]);
-
-  useEffect(() => {
-    getFirebaseItem();
-  }, []);
-
-  const getFirebaseItem = async () => {
-    const shops = await getShops();
-    setShops(shops);
-  };
-  const shopItems = shops.map((shop, index) => {
-    return <ShopReviewItem shop={shop} key={index.toString()} />;
-  });
-  return (
-    <SafeAreaView style={styles.container}>
-      <FlatList
-        data={shops}
-        renderItem={({ item }: { item: Shop }) => (
-          <ShopReviewItem shop={item} />
-        )}
-        keyExtractor={(item, index) => index.toString()}
-        numColumns={2}
-      />
-      <StatusBar style="auto" />
-    </SafeAreaView>
-  );
+  return <AppNavigator />;
 }
 
 const styles = StyleSheet.create({
