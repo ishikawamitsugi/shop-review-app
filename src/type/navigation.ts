@@ -1,6 +1,9 @@
 import {Shop} from './shop';
 
 export type RootStackPramList = {
-    Home: undefined,
-    Shop: {shop: Shop}
+    Main: undefined;
+    Home: undefined;
+    Shop: {shop: Shop};
+    User: undefined;
+    CreateReview: {shop: Shop};
 }
