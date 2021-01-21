@@ -14,9 +14,17 @@ import AppNavigator from "./src/navigations/AppNavigator";
 import "firebase/firestore";
 import { ShopReviewItem } from "./src/components/ShopReviewItem";
 LogBox.ignoreLogs(["Setting a timer"]);
+import { UserContext } from "./src/context/userContext";
+import { User } from "./src/type/user";
 
 export default function App() {
-  return <AppNavigator />;
+  const [user, setUser] = useState<User | null>(null);
+
+  return (
+    <UserContext.Provider value={{ user, setUser }}>
+      <AppNavigator />
+    </UserContext.Provider>
+  );
 }
 
 const styles = StyleSheet.create({

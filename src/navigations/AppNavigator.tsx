@@ -6,7 +6,7 @@ import MainTabNavigator from "./MainTabNavigator";
 import AuthScreen from "../screens/AuthScreen";
 
 const AppNavigator: React.FC = () => {
-  const user = { id: 123 };
+  const user = null;
 
   return (
     <NavigationContainer>
