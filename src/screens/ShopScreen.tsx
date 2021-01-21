@@ -29,7 +29,11 @@ const ShopScreen: React.FC<Props> = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    width: "100%",
+    height: "100%",
+    position: "relative",
+  },
 });
 
 export default ShopScreen;

@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     position: "absolute",
     right: 16,
-    top: 500,
+    bottom: 30,
   },
 });
 

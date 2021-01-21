@@ -1,8 +1,9 @@
 import { StackNavigationProp } from "@react-navigation/stack";
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { RootStackPramList } from "../type/navigation";
 import { RouteProp } from "@react-navigation/native";
+import IconButton from "../components/IconButton";
 
 type Props = {
   navigation: StackNavigationProp<RootStackPramList, "CreateReview">;
@@ -11,6 +12,19 @@ type Props = {
 
 const CreateReviewScreen: React.FC<Props> = ({ navigation, route }) => {
   console.log("CreateReviewScreen");
+  const { shop } = route.params;
+  useEffect(() => {
+    navigation.setOptions({
+      title: shop.name,
+      headerLeft: () => (
+        <IconButton
+          name="x"
+          onPress={() => navigation.goBack()}
+          color={"black"}
+        />
+      ),
+    });
+  }, [shop]);
   return (
     <View>
       <Text>Hello CreateReviewScreen !</Text>
