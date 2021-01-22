@@ -1,12 +1,12 @@
 import "react-native-gesture-handler";
-import * as React from "react";
+import React, { useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import HomeStackNavigator from "./HomeStackNavigator";
 import MainTabNavigator from "./MainTabNavigator";
 import AuthScreen from "../screens/AuthScreen";
+import { UserContext } from "../context/userContext";
 
 const AppNavigator: React.FC = () => {
-  const user = null;
+  const { user } = useContext(UserContext);
 
   return (
     <NavigationContainer>

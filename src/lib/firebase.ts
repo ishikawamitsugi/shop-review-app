@@ -1,5 +1,6 @@
 import * as firebase from 'firebase';
 import "firebase/auth";
+import "firebase/firestore";
 import {Shop} from  '../type/shop';
 import Constants from 'expo-constants';
 import {User, initialUser} from '../type/user'
