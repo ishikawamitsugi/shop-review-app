@@ -2,11 +2,11 @@ import React, {createContext} from 'react'
 import {User} from '../type/user';
 
 type UserContext = {
-    user: User | null;
-    setUser: (user : User | null) => void
+    user?: User;
+    setUser: (user?: User) => void
 }
 
 export const UserContext = createContext<UserContext>({
-    user: null,
+    user: undefined,
     setUser: () => {}
 })

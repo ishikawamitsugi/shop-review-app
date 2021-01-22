@@ -18,7 +18,7 @@ import { UserContext } from "./src/context/userContext";
 import { User } from "./src/type/user";
 
 export default function App() {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | undefined>(undefined);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

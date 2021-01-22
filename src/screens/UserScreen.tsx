@@ -1,26 +1,48 @@
-import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import React, { useState, useContext } from "react";
+import { Platform } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView } from "react-native";
+import { Form } from "../components/Form";
+import { RootStackPramList } from "../type/navigation";
+import { Button } from "../components/Button";
+import { UserContext } from "../context/userContext";
+import { User } from "../type/user";
+import { updateUser } from "../lib/firebase";
+import firebase from "firebase";
+import "firebase/firestore";
 
-type Props = {};
+type Props = {
+  navigation: StackNavigationProp<RootStackPramList, "User">;
+  route: RouteProp<RootStackPramList, "User">;
+};
 
-const UserScreen: React.FC<Props> = () => {
+const UserScreen: React.FC<Props> = ({ navigation, route }: Props) => {
+  const { user } = useContext(UserContext);
+  const [name, setName] = useState<string | undefined>(user?.name);
+
+  const onSubmit = async () => {
+    const updatedAt = firebase.firestore.Timestamp.now();
+    await updateUser({ name, updatedAt, createdAt: user?.createdAt }, user?.id);
+  };
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Hello UserScreen</Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <Form
+        value={name}
+        onChangeText={(text) => {
+          setName(text);
+        }}
+        label="名前"
+      />
+      <Button text={"登録"} onPress={onSubmit} />
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%",
-    height: "100%",
-    backgroundColor: "red",
-  },
-  text: {
-    color: "black",
+    backgroundColor: "#fff",
   },
 });
-
 export default UserScreen;

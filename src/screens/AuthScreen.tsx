@@ -19,7 +19,7 @@ const AuthScreen: React.FC<Props> = () => {
       setUser(user);
     };
     fetchUser();
-  }, []);
+  }, [setUser]);
 
   return (
     <SafeAreaView style={styles.container}>

@@ -5,6 +5,7 @@ import {Shop} from  '../type/shop';
 import Constants from 'expo-constants';
 import {User, initialUser} from '../type/user'
 import { unstable_renderSubtreeIntoContainer } from 'react-dom';
+import { forSlideLeft } from '@react-navigation/stack/lib/typescript/src/TransitionConfigs/HeaderStyleInterpolators';
 if (!firebase.apps.length) {
     const firebaseConfig = Constants.manifest.extra.firebase;
     console.log(firebaseConfig);
@@ -32,7 +33,7 @@ export const signIn = async(): Promise<User> => {
         await firebase.firestore().collection('users').doc(userId).set(initialUser);
         return {
             ...initialUser,
-            uid: userId
+            id: userId
         } as User;
     } else {
         return {
@@ -40,4 +41,8 @@ export const signIn = async(): Promise<User> => {
             id: userId
         } as User
     }
+}
+
+export const updateUser = async (params: any, userId?: string, ): Promise<void>=> {
+    await firebase.firestore().collection('users').doc(userId).set(params);
 }
