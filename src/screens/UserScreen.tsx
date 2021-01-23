@@ -11,6 +11,7 @@ import { User } from "../type/user";
 import { updateUser } from "../lib/firebase";
 import firebase from "firebase";
 import "firebase/firestore";
+import { Loading } from "../components/Loading";
 
 type Props = {
   navigation: StackNavigationProp<RootStackPramList, "User">;
@@ -20,17 +21,19 @@ type Props = {
 const UserScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const { user, setUser } = useContext(UserContext);
   const [name, setName] = useState<string>(user.name);
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async () => {
+    setLoading(true);
     const updatedAt = firebase.firestore.Timestamp.now();
     await updateUser({ name, updatedAt, createdAt: user.createdAt }, user.id);
+    setLoading(false);
     const updateUserInfo: User = {
       id: user.id,
       createdAt: user.createdAt,
       updatedAt,
       name,
     };
-    console.log("updateUserInfo", updateUserInfo);
     setUser(updateUserInfo);
   };
   return (
@@ -43,6 +46,7 @@ const UserScreen: React.FC<Props> = ({ navigation, route }: Props) => {
         label="名前"
       />
       <Button text={"登録"} onPress={onSubmit} />
+      <Loading visible={loading} />
     </SafeAreaView>
   );
 };
@@ -51,6 +55,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    position: "relative",
   },
 });
 export default UserScreen;
