@@ -11,7 +11,6 @@ type Props = {
 };
 
 const CreateReviewScreen: React.FC<Props> = ({ navigation, route }) => {
-  console.log("CreateReviewScreen");
   const { shop } = route.params;
   useEffect(() => {
     navigation.setOptions({

@@ -10,7 +10,7 @@ const AppNavigator: React.FC = () => {
 
   return (
     <NavigationContainer>
-      {!user ? <AuthScreen /> : <MainTabNavigator />}
+      {!user.id ? <AuthScreen /> : <MainTabNavigator />}
     </NavigationContainer>
   );
 };

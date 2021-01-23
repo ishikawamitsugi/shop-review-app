@@ -15,10 +15,10 @@ import "firebase/firestore";
 import { ShopReviewItem } from "./src/components/ShopReviewItem";
 LogBox.ignoreLogs(["Setting a timer"]);
 import { UserContext } from "./src/context/userContext";
-import { User } from "./src/type/user";
+import { initialUser, User } from "./src/type/user";
 
 export default function App() {
-  const [user, setUser] = useState<User | undefined>(undefined);
+  const [user, setUser] = useState<User>(initialUser);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

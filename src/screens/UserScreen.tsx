@@ -1,6 +1,6 @@
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Platform } from "react-native";
 import { StyleSheet, View, Text, SafeAreaView } from "react-native";
 import { Form } from "../components/Form";
@@ -18,12 +18,20 @@ type Props = {
 };
 
 const UserScreen: React.FC<Props> = ({ navigation, route }: Props) => {
-  const { user } = useContext(UserContext);
-  const [name, setName] = useState<string | undefined>(user?.name);
+  const { user, setUser } = useContext(UserContext);
+  const [name, setName] = useState<string>(user.name);
 
   const onSubmit = async () => {
     const updatedAt = firebase.firestore.Timestamp.now();
-    await updateUser({ name, updatedAt, createdAt: user?.createdAt }, user?.id);
+    await updateUser({ name, updatedAt, createdAt: user.createdAt }, user.id);
+    const updateUserInfo: User = {
+      id: user.id,
+      createdAt: user.createdAt,
+      updatedAt,
+      name,
+    };
+    console.log("updateUserInfo", updateUserInfo);
+    setUser(updateUserInfo);
   };
   return (
     <SafeAreaView style={styles.container}>

@@ -8,7 +8,6 @@ import { unstable_renderSubtreeIntoContainer } from 'react-dom';
 import { forSlideLeft } from '@react-navigation/stack/lib/typescript/src/TransitionConfigs/HeaderStyleInterpolators';
 if (!firebase.apps.length) {
     const firebaseConfig = Constants.manifest.extra.firebase;
-    console.log(firebaseConfig);
     firebase.initializeApp(firebaseConfig);
 }
 
@@ -30,11 +29,12 @@ export const signIn = async(): Promise<User> => {
     const userId = userCredential.user?.uid; 
     const userDoc = await firebase.firestore().collection('users').doc(userId).get();
     if ( !userDoc.exists) {
-        await firebase.firestore().collection('users').doc(userId).set(initialUser);
-        return {
+        await firebase.firestore().collection('users').doc(userId).set({name: "", createdAt:initialUser.createdAt, udpatedAt: initialUser.updatedAt});
+        const loginUser : User= {
             ...initialUser,
-            id: userId
-        } as User;
+            id: userId ?? ""
+        }
+        return loginUser;
     } else {
         return {
             ...userDoc.data(),
@@ -43,6 +43,6 @@ export const signIn = async(): Promise<User> => {
     }
 }
 
-export const updateUser = async (params: any, userId?: string, ): Promise<void>=> {
+export const updateUser = async (params: any, userId: string, ): Promise<void>=> {
     await firebase.firestore().collection('users').doc(userId).set(params);
 }
