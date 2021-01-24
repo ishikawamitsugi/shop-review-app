@@ -3,9 +3,9 @@ import "firebase/auth";
 import "firebase/firestore";
 import {Shop} from  '../type/shop';
 import Constants from 'expo-constants';
-import {User, initialUser} from '../type/user'
-import { unstable_renderSubtreeIntoContainer } from 'react-dom';
-import { forSlideLeft } from '@react-navigation/stack/lib/typescript/src/TransitionConfigs/HeaderStyleInterpolators';
+import {User, initialUser} from '../type/user';
+import {Review} from '../type/review';
+
 if (!firebase.apps.length) {
     const firebaseConfig = Constants.manifest.extra.firebase;
     firebase.initializeApp(firebaseConfig);
@@ -14,7 +14,7 @@ if (!firebase.apps.length) {
 export const getShops = async () => {
     try {
         const snapshot = await firebase.firestore().collection("shops").orderBy('score', 'desc').get();
-        const shops: Shop[] = snapshot.docs.map((doc) => doc.data() as Shop);
+        const shops: Shop[] = snapshot.docs.map((doc) => {return {...doc.data(), id: doc.id } as Shop});
         return shops;
     }
     catch (err) {
@@ -45,4 +45,13 @@ export const signIn = async(): Promise<User> => {
 
 export const updateUser = async (params: any, userId: string, ): Promise<void>=> {
     await firebase.firestore().collection('users').doc(userId).set(params);
+}
+
+export const addReview = async (shopId: string, review: Review) => {
+    try {
+        await firebase.firestore().collection('shops').doc(shopId).collection('review').add(review);
+    }
+    catch(err) {
+        alert(err);
+    }
 }
