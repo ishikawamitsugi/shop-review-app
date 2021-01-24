@@ -7,12 +7,16 @@ import {
 } from "react-native";
 
 type Props = {
-  name: "x";
+  name: "x" | "camera";
   color: string;
   onPress: (event: GestureResponderEvent) => void;
 };
 
-const IconButton: React.FC<Props> = ({ name, color, onPress }: Props) => {
+export const IconButton: React.FC<Props> = ({
+  name,
+  color,
+  onPress,
+}: Props) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
       <Feather name={name} color={color} size={25} />
@@ -25,5 +29,3 @@ const styles = StyleSheet.create({
     margin: 15,
   },
 });
-
-export default IconButton;

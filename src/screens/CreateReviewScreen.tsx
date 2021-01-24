@@ -3,7 +3,7 @@ import React, { useEffect, useCallback, useState, useContext } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { RootStackPramList } from "../type/navigation";
 import { RouteProp } from "@react-navigation/native";
-import IconButton from "../components/IconButton";
+import { IconButton } from "../components/IconButton";
 import { TextArea } from "../components/TextArea";
 import { StarInput } from "../components/StarInput";
 import { Button } from "../components/Button";
@@ -62,6 +62,9 @@ const CreateReviewScreen: React.FC<Props> = ({ navigation, route }) => {
         label={"レビュー"}
         placeholder={"レビューを書いてください"}
       ></TextArea>
+      <View style={styles.photoContainer}>
+        <IconButton name="camera" onPress={() => {}} color={"#ccc"} />
+      </View>
       <Button text={"レビューを投稿する"} onPress={onSubmit} />
     </View>
   );
@@ -71,6 +74,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  photoContainer: {
+    margin: 8,
   },
 });
 
