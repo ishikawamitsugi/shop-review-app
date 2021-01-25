@@ -55,3 +55,16 @@ export const addReview = async (shopId: string, review: Review) => {
         alert(err);
     }
 }
+
+export const createReviewRef = async (shopId: string) => {
+    try {
+        return await firebase.firestore()
+        .collection('shops')
+        .doc(shopId)
+        .collection('review')
+        .doc();
+    }
+    catch(err) {
+        alert(err);
+    }
+}

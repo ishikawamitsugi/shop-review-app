@@ -11,7 +11,8 @@ import { Review } from "../type/review";
 import { UserContext } from "../context/userContext";
 import firebase from "firebase";
 import "firebase/firestore";
-import { addReview } from "../lib/firebase";
+import { createReviewRef } from "../lib/firebase";
+import { pickImage } from "../lib/imagePicker";
 
 type Props = {
   navigation: StackNavigationProp<RootStackPramList, "CreateReview">;
@@ -22,6 +23,7 @@ const CreateReviewScreen: React.FC<Props> = ({ navigation, route }) => {
   const { shop } = route.params;
   const [text, setText] = useState<string>("");
   const [score, setScore] = useState<number>(3);
+  const [imageUri, setImageUri] = useState<string>("");
   const { user } = useContext(UserContext);
 
   useEffect(() => {
@@ -37,17 +39,12 @@ const CreateReviewScreen: React.FC<Props> = ({ navigation, route }) => {
     });
   }, [shop]);
 
-  const onSubmit = async () => {
-    const review: Review = {
-      text,
-      score,
-      user: { id: user.id, name: user.name },
-      shop: { id: shop.id, name: shop.id },
-      createdAt: firebase.firestore.Timestamp.now(),
-      updatedAt: firebase.firestore.Timestamp.now(),
-    };
-    await addReview(shop.id, review);
+  const onPickImage = async () => {
+    const uri = await pickImage();
+    setImageUri(uri);
   };
+
+  const onSubmit = async () => {};
 
   return (
     <View>
@@ -63,7 +60,7 @@ const CreateReviewScreen: React.FC<Props> = ({ navigation, route }) => {
         placeholder={"レビューを書いてください"}
       ></TextArea>
       <View style={styles.photoContainer}>
-        <IconButton name="camera" onPress={() => {}} color={"#ccc"} />
+        <IconButton name="camera" onPress={onPickImage} color={"#ccc"} />
       </View>
       <Button text={"レビューを投稿する"} onPress={onSubmit} />
     </View>
