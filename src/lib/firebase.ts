@@ -1,6 +1,7 @@
 import * as firebase from 'firebase';
 import "firebase/auth";
 import "firebase/firestore";
+import 'firebase/storage';
 import {Shop} from  '../type/shop';
 import Constants from 'expo-constants';
 import {User, initialUser} from '../type/user';
@@ -67,4 +68,25 @@ export const createReviewRef = async (shopId: string) => {
     catch(err) {
         alert(err);
     }
+}
+
+export const uploadImage = async (imageUrl: string, path: string): Promise<string> => {
+
+    // 画像をAPIを通じて取得
+    const localUri =  await fetch(imageUrl);
+
+    // バイナリ形式に変換
+    const blob = await localUri.blob();
+    const ref = firebase.storage().ref().child(path);
+  
+    let downloadUrl = '';
+    try {
+        await ref.put(blob);
+        downloadUrl = await ref.getDownloadURL();
+        return downloadUrl;
+    }
+    catch (err) {
+        console.log(err);
+    }
+    return downloadUrl;
 }

@@ -1,6 +1,6 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useEffect, useCallback, useState, useContext } from "react";
-import { StyleSheet, View, Image } from "react-native";
+import { StyleSheet, View, Image, Alert } from "react-native";
 import { RootStackPramList } from "../type/navigation";
 import { RouteProp } from "@react-navigation/native";
 import { IconButton } from "../components/IconButton";
@@ -11,8 +11,10 @@ import { Review } from "../type/review";
 import { UserContext } from "../context/userContext";
 import firebase from "firebase";
 import "firebase/firestore";
-import { createReviewRef } from "../lib/firebase";
+import { createReviewRef, uploadImage } from "../lib/firebase";
 import { pickImage } from "../lib/imagePicker";
+import { getExtention } from "../util/file";
+import { Loading } from "../components/Loading";
 
 type Props = {
   navigation: StackNavigationProp<RootStackPramList, "CreateReview">;
@@ -25,7 +27,7 @@ const CreateReviewScreen: React.FC<Props> = ({ navigation, route }) => {
   const [score, setScore] = useState<number>(3);
   const [imageUri, setImageUri] = useState<string>("");
   const { user } = useContext(UserContext);
-
+  const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     navigation.setOptions({
       title: shop.name,
@@ -44,7 +46,42 @@ const CreateReviewScreen: React.FC<Props> = ({ navigation, route }) => {
     setImageUri(uri);
   };
 
-  const onSubmit = async () => {};
+  const onSubmit = async () => {
+    if (!text || !imageUri) {
+      Alert.alert("テキストと画像の両方を入力してください");
+      return;
+    }
+    // storageのパスを決定
+    const extention = getExtention(imageUri);
+    setLoading(true);
+    // 参照先を取得
+    const reviewDocRef = await createReviewRef(shop.id);
+    let downloadUri = undefined;
+    if (!!reviewDocRef) {
+      const storagePath = `reviewDoc/${reviewDocRef.id}.${extention}`;
+      downloadUri = await uploadImage(imageUri, storagePath);
+      // reviewオブジェクトの生成
+      const review: Review = {
+        user: {
+          id: user.id,
+          name: user.name,
+        },
+        shop: {
+          id: shop.id,
+          name: shop.name,
+        },
+        text,
+        score,
+        imageUri: downloadUri ?? "",
+        createdAt: firebase.firestore.Timestamp.now(),
+        updatedAt: firebase.firestore.Timestamp.now(),
+      };
+      // fireStoreにレビューを送信
+      await reviewDocRef.set(review);
+    }
+    setLoading(false);
+    navigation.goBack();
+  };
 
   return (
     <View>
@@ -64,6 +101,7 @@ const CreateReviewScreen: React.FC<Props> = ({ navigation, route }) => {
       </View>
       {!!imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
       <Button text={"レビューを投稿する"} onPress={onSubmit} />
+      <Loading visible={loading} />
     </View>
   );
 };
