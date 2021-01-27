@@ -1,6 +1,6 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useEffect, useCallback, useState, useContext } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Image } from "react-native";
 import { RootStackPramList } from "../type/navigation";
 import { RouteProp } from "@react-navigation/native";
 import { IconButton } from "../components/IconButton";
@@ -62,6 +62,7 @@ const CreateReviewScreen: React.FC<Props> = ({ navigation, route }) => {
       <View style={styles.photoContainer}>
         <IconButton name="camera" onPress={onPickImage} color={"#ccc"} />
       </View>
+      {!!imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
       <Button text={"レビューを投稿する"} onPress={onSubmit} />
     </View>
   );
@@ -73,6 +74,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   photoContainer: {
+    margin: 8,
+  },
+  image: {
+    width: 100,
+    height: 100,
     margin: 8,
   },
 });
