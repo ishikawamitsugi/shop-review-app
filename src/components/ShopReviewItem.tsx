@@ -1,7 +1,7 @@
 import { View, StyleSheet, Image, Text, Dimensions } from "react-native";
 import React from "react";
 import { Shop } from "../type/shop";
-import Stars from "./Stars";
+import { Stars } from "./Stars";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 const { width } = Dimensions.get("window");

@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Shop } from "../type/shop";
-import Stars from "./Stars";
+import { Stars } from "./Stars";
 
 const styles = StyleSheet.create({
   container: {
