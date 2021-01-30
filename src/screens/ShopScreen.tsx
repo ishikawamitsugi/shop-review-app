@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackPramList } from "../type/navigation";
@@ -9,6 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ReviewItem } from "../components/ReviewItem";
 import { getReviews } from "../lib/firebase";
 import { Review } from "../type/review";
+import { ReviewContext } from "../context/reviewContext";
 
 type Props = {
   navigation: StackNavigationProp<RootStackPramList, "Shop">;
@@ -17,22 +18,22 @@ type Props = {
 
 const ShopScreen: React.FC<Props> = ({ navigation, route }) => {
   const { shop } = route.params;
-  const [review, setReview] = useState<Review[]>([]);
+  const { reviews, setReviews } = useContext(ReviewContext);
 
   useEffect(() => {
     navigation.setOptions({ title: shop.name });
-    const fetchReview = async () => {
+    const fetchReviews = async () => {
       const ret = await getReviews(shop.id);
-      setReview(ret);
+      setReviews(ret);
     };
-    fetchReview();
+    fetchReviews();
   }, [shop]);
 
   return (
     <View style={styles.container}>
       <FlatList
         ListHeaderComponent={<ShopDetail shop={shop} />}
-        data={review}
+        data={reviews}
         renderItem={({ item }: { item: Review }) => (
           <ReviewItem review={item} />
         )}

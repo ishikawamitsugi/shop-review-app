@@ -16,13 +16,18 @@ import { ShopReviewItem } from "./src/components/ShopReviewItem";
 LogBox.ignoreLogs(["Setting a timer"]);
 import { UserContext } from "./src/context/userContext";
 import { initialUser, User } from "./src/type/user";
+import { Review } from "./src/type/review";
+import { ReviewContext } from "./src/context/reviewContext";
 
 export default function App() {
   const [user, setUser] = useState<User>(initialUser);
+  const [reviews, setReviews] = useState<Review[]>([]);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
-      <AppNavigator />
+      <ReviewContext.Provider value={{ reviews, setReviews }}>
+        <AppNavigator />
+      </ReviewContext.Provider>
     </UserContext.Provider>
   );
 }

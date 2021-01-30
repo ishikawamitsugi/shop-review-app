@@ -15,6 +15,7 @@ import { createReviewRef, uploadImage } from "../lib/firebase";
 import { pickImage } from "../lib/imagePicker";
 import { getExtention } from "../util/file";
 import { Loading } from "../components/Loading";
+import { ReviewContext } from "../context/reviewContext";
 
 type Props = {
   navigation: StackNavigationProp<RootStackPramList, "CreateReview">;
@@ -28,6 +29,8 @@ const CreateReviewScreen: React.FC<Props> = ({ navigation, route }) => {
   const [imageUri, setImageUri] = useState<string>("");
   const { user } = useContext(UserContext);
   const [loading, setLoading] = useState<boolean>(false);
+  const { reviews, setReviews } = useContext(ReviewContext);
+
   useEffect(() => {
     navigation.setOptions({
       title: shop.name,
@@ -61,7 +64,7 @@ const CreateReviewScreen: React.FC<Props> = ({ navigation, route }) => {
       const storagePath = `reviewDoc/${reviewDocRef.id}.${extention}`;
       downloadUri = await uploadImage(imageUri, storagePath);
       // reviewオブジェクトの生成
-      const review: Review = {
+      const uploadReview: Review = {
         user: {
           id: user.id,
           name: user.name,
@@ -77,7 +80,8 @@ const CreateReviewScreen: React.FC<Props> = ({ navigation, route }) => {
         updatedAt: firebase.firestore.Timestamp.now(),
       };
       // fireStoreにレビューを送信
-      await reviewDocRef.set(review);
+      await reviewDocRef.set(uploadReview);
+      setReviews([uploadReview, ...reviews]);
     }
     setLoading(false);
     navigation.goBack();
