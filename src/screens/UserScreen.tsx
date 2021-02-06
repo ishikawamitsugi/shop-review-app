@@ -12,6 +12,7 @@ import { updateUser } from "../lib/firebase";
 import firebase from "firebase";
 import "firebase/firestore";
 import { Loading } from "../components/Loading";
+import { Button as PaperButton } from "react-native-paper";
 
 type Props = {
   navigation: StackNavigationProp<RootStackPramList, "User">;
@@ -45,7 +46,12 @@ const UserScreen: React.FC<Props> = ({ navigation, route }: Props) => {
         }}
         label="名前"
       />
-      <Button text={"登録"} onPress={onSubmit} />
+      <View style={styles.papperButton}>
+        <PaperButton icon="camera" mode="contained" onPress={onSubmit}>
+          登録
+        </PaperButton>
+      </View>
+
       <Loading visible={loading} />
     </SafeAreaView>
   );
@@ -56,6 +62,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     position: "relative",
+  },
+  papperButton: {
+    display: "flex",
+    width: "80%",
+    height: 50,
+    marginLeft: 32,
+    justifyContent: "center",
+  },
+  papperButtonText: {
+    textAlign: "center",
   },
 });
 export default UserScreen;

@@ -120,7 +120,6 @@ export const getReviews = async (shopId: string) => {
     .orderBy("createdAt", "desc")
     .get();
 
-  console.log("reviewDocs.docs", reviewDocs.docs);
   return reviewDocs.docs.map((doc) => {
     return { ...doc.data(), id: doc.id } as Review;
   });

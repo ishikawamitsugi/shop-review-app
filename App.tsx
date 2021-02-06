@@ -18,17 +18,20 @@ import { UserContext } from "./src/context/userContext";
 import { initialUser, User } from "./src/type/user";
 import { Review } from "./src/type/review";
 import { ReviewContext } from "./src/context/reviewContext";
+import { Provider as PaperProvider } from "react-native-paper";
 
 export default function App() {
   const [user, setUser] = useState<User>(initialUser);
   const [reviews, setReviews] = useState<Review[]>([]);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
-      <ReviewContext.Provider value={{ reviews, setReviews }}>
-        <AppNavigator />
-      </ReviewContext.Provider>
-    </UserContext.Provider>
+    <PaperProvider>
+      <UserContext.Provider value={{ user, setUser }}>
+        <ReviewContext.Provider value={{ reviews, setReviews }}>
+          <AppNavigator />
+        </ReviewContext.Provider>
+      </UserContext.Provider>
+    </PaperProvider>
   );
 }
 
